@@ -41,20 +41,11 @@ router.post(
 
       // Generate Avatar
       const avatar = normalize(
-        gravatar.url(email, {
-          s: '200',
-          r: 'pg',
-          d: 'mm',
-        }),
+        gravatar.url(email, { s: '200', r: 'pg', d: 'mm' }),
         { forceHttps: true }
       );
 
-      user = new User({
-        name,
-        email,
-        password,
-        avatar,
-      });
+      user = new User({ name, email, password, avatar });
 
       // Encrypt Password
       const salt = await bcrypt.genSalt(10);
@@ -64,8 +55,9 @@ router.post(
 
       // Generate JWT
       const payload = {
-        id: user.id,
+        user: { id: user.id },
       };
+
       jwt.sign(
         payload,
         config.get('jwtSecret'),
