@@ -154,8 +154,7 @@ router.delete('/', auth, async (req, res) => {
 
 //  @route      PUT api/profile/experience
 //  @desc       Add Profile Experience
-//  @access
-
+//  @access     Private
 router.put(
   '/experience',
   [
@@ -197,12 +196,31 @@ router.put(
       profile.experience.unshift(newExp);
       await profile.save();
 
-      res.status(201).json(profile);
+      res.status(200).json(profile);
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server Error');
     }
   }
 );
+
+//  @route      DELETE api/profile/experience/:expid
+//  @desc       Delete Profile Experience
+//  @access     Private
+router.delete('/experience/:expid', auth, async (req, res) => {
+  try {
+    const profile = await Profile.findOne({ user: req.user.id });
+
+    profile.experience = profile.experience.filter(
+      (exp) => exp._id.toString() !== req.params.expid
+    );
+    await profile.save();
+
+    res.status(200).json(profile);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
 
 module.exports = router;
