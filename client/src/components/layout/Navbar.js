@@ -17,9 +17,9 @@ const Navbar = ({ auth: { isAuthenticated, loading }, logout }) => {
         <Link to='/dashboard'>Dashboard</Link>
       </li>
       <li>
-        <Link onClick={logout} href='#!'>
+        <a onClick={logout} href='#!'>
           Logout
-        </Link>
+        </a>
       </li>
     </ul>
   );
