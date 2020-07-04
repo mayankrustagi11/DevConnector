@@ -9,6 +9,7 @@ const checkObjectId = require('../../middleware/checkObjectId');
 
 const Profile = require('../../models/Profile');
 const User = require('../../models/User');
+const Post = require('../../models/Post');
 
 //  @route      GET api/profile/me
 //  @desc       Get Logged in User's Profile
@@ -139,6 +140,9 @@ router.get('/user/:userid', checkObjectId('userid'), async (req, res) => {
 //  @access     Private
 router.delete('/', auth, async (req, res) => {
   try {
+    // Remove Posts
+    await Post.deleteMany({ user: req.user.id });
+
     // Remove Profile
     await Profile.findOneAndRemove({ user: req.user.id });
 
